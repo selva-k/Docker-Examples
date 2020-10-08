@@ -33,18 +33,13 @@ app = Flask(__name__)
 
 # list of cat images
 images = [
-   "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr05/15/9/anigif_enhanced-buzz-26388-1381844103-11.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr01/15/9/anigif_enhanced-buzz-31540-1381844535-8.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr05/15/9/anigif_enhanced-buzz-26390-1381844163-18.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr06/15/10/anigif_enhanced-buzz-1376-1381846217-0.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr03/15/9/anigif_enhanced-buzz-3391-1381844336-26.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr06/15/10/anigif_enhanced-buzz-29111-1381845968-0.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr03/15/9/anigif_enhanced-buzz-3409-1381844582-13.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr02/15/9/anigif_enhanced-buzz-19667-1381844937-10.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr05/15/9/anigif_enhanced-buzz-26358-1381845043-13.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr06/15/9/anigif_enhanced-buzz-18774-1381844645-6.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr06/15/9/anigif_enhanced-buzz-25158-1381844793-0.gif",
-    "http://img.buzzfeed.com/buzzfeed-static/static/2013-10/enhanced/webdr03/15/10/anigif_enhanced-buzz-11980-1381846269-1.gif"
+   "https://img.buzzfeed.com/buzzfeed-static/static/2019-04/10/15/asset/buzzfeed-prod-web-06/sub-buzz-27740-1554926029-1.jpg",
+    "https://img.buzzfeed.com/buzzfeed-static/static/2019-04/10/16/asset/buzzfeed-prod-web-02/sub-buzz-3095-1554928262-1.jpg",
+    "https://img.buzzfeed.com/buzzfeed-static/static/2019-04/10/16/asset/buzzfeed-prod-web-03/sub-buzz-9867-1554929262-1.jpg",
+    "https://img.buzzfeed.com/buzzfeed-static/static/2019-04/10/16/asset/buzzfeed-prod-web-05/sub-buzz-26839-1554929491-1.jpg",
+    "https://img.buzzfeed.com/buzzfeed-static/static/2019-04/10/16/asset/buzzfeed-prod-web-01/sub-buzz-8758-1554926462-1.jpg",
+    "https://img.buzzfeed.com/buzzfeed-static/static/2019-04/10/16/asset/buzzfeed-prod-web-04/sub-buzz-19835-1554927404-1.jpg",
+    "https://img.buzzfeed.com/buzzfeed-static/static/2019-04/10/16/asset/buzzfeed-prod-web-06/sub-buzz-511-1554929868-1.jpg"
     ]
 
 @app.route('/')
