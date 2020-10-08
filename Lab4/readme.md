@@ -12,7 +12,7 @@ We'll do this by first pulling together the components for a random cat picture 
 
 For the purposes of this workshop, we've created a fun little Python Flask app that displays a random cat `.gif` every time it is loaded - because, you know, who doesn't like cats?
 
-Start by creating a directory called ```flask-app``` where we'll create the following files:
+Start by creating a directory called ```mkdir flask-app``` where we'll create the following files:
 
 - [app.py](#apppy)
 - [requirements.txt](#requirementstxt)
