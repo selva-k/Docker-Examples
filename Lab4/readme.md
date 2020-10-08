@@ -1,3 +1,4 @@
+## 4.0 Flash App with Docker
 **The goal of this exercise is to create a Docker image which will run a Flask app.**
 
 We'll do this by first pulling together the components for a random cat picture generator built with Python Flask, then _dockerizing_ it by writing a _Dockerfile_. Finally, we'll build the image, and then run it.
@@ -8,7 +9,7 @@ We'll do this by first pulling together the components for a random cat picture 
 - [Run your image](#234-run-your-image)
 - [Dockerfile commands summary](#235-dockerfile-commands-summary)
 
-### 2.3.1 Create a Python Flask app that displays random cat pix
+### 4.1 Create a Python Flask app that displays random cat pix
 
 For the purposes of this workshop, we've created a fun little Python Flask app that displays a random cat `.gif` every time it is loaded - because, you know, who doesn't like cats?
 
@@ -93,7 +94,7 @@ Create a directory called `templates` and create an **index.html** file in that 
 </html>
 ```
 
-### 2.3.2 Write a Dockerfile
+### 4.2 Write a Dockerfile
 
 We want to create a Docker image with this web app. As mentioned above, all user images are based on a _base image_. Since our application is written in Python, we will build our own Python image based on [Alpine](https://store.docker.com/images/alpine). We'll do that using a **Dockerfile**.
 
@@ -170,7 +171,7 @@ A [Dockerfile](https://docs.docker.com/engine/reference/builder/) is a text file
   CMD ["python", "/usr/src/app/app.py"]
   ```
 
-### 2.3.3 Build the image
+### 4.3 Build the image
 
 Now that you have your `Dockerfile`, you can build your image. The `docker build` command does the heavy-lifting of creating a docker image from a `Dockerfile`.
 
@@ -246,7 +247,7 @@ Successfully built 2f7357a0805d
 
 If you don't have the `alpine:3.5` image, the client will first pull the image and then create your image. Therefore, your output on running the command will look different from mine. If everything went well, your image should be ready! Run `docker images` and see if your image (`<YOUR_USERNAME>/myfirstapp`) shows.
 
-### 2.3.4 Run your image
+### 4.4 Run your image
 The next step in this section is to run the image and see if it actually works.
 
 ```bash
@@ -260,7 +261,7 @@ Head over to `http://localhost:8888` and your app should be live. **Note** If yo
 
 Hit the Refresh button in the web browser to see a few more cat images.
 
-### 2.3.4 Push your image
+### 4.5 Push your image
 Now that you've created and tested your image, you can push it to [Docker Cloud](https://cloud.docker.com).
 
 First you have to login to your Docker Cloud account, to do that:
@@ -292,7 +293,7 @@ or
 $ docker rm -f myfirstapp
 ```
 
-### 2.3.5 Dockerfile commands summary
+### 4.6 Dockerfile commands summary
 
 Here's a quick summary of the few basic commands we used in our Dockerfile.
 
