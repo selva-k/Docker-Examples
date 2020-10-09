@@ -1,158 +1,133 @@
 ## 5.0 Docker Compose
-**The goal of this exercise is to create a Docker Compose with Python/Flask application with Nginx proxy and a Mongo database**
-Before starting, [install Compose](https://docs.docker.com/compose/install/)
+**The goal of this exercise is to create a Docker Compose with Python/Flask application with Redis database**
 
 Project structure:
 ```
 .
+├── app.py
+├── requirements.txt
+├── Dockerfile
 ├── docker-compose.yaml
-├── flask
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── server.py
-└── nginx
-    └── nginx.conf
+
+
 
 ```
 
 ### 5.1 Create a Python Flask app
 
 
-Start by creating a directory called ```mkdir flask``` where we'll create the following files:
+Start by creating a directory called ```mkdir composetest``` where we'll create the following files:
 
-Make sure to ```cd flask``` before you start creating the files, because you don't want to start adding a whole bunch of other random files to your image.
+Make sure to ```cd composetest``` before you start creating the files.
 
-### 5.2 server.py
+### 5.2 app.py
 
-Create the **server.py** with the following content:
+Create the **app.py** with the following content:
 
 ```python
-#!/usr/bin/env python
-import os
+import time
 
+import redis
 from flask import Flask
-from pymongo import MongoClient
 
 app = Flask(__name__)
+cache = redis.Redis(host='redis', port=6379)
 
-client = MongoClient("mongo:27017")
+def get_hit_count():
+    retries = 5
+    while True:
+        try:
+            return cache.incr('hits')
+        except redis.exceptions.ConnectionError as exc:
+            if retries == 0:
+                raise exc
+            retries -= 1
+            time.sleep(0.5)
 
 @app.route('/')
-def todo():
-    try:
-        client.admin.command('ismaster')
-    except:
-        return "Server not available"
-    return "Hello fom the MongoDB client!\n"
-
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=os.environ.get("FLASK_SERVER_PORT", 9090), debug=True)
-
+def hello():
+    count = get_hit_count()
+    return 'Hello World! I have been seen {} times.\n'.format(count)
 ```
 
-### 5.3 requirements.txt
+#### 5.3 requirements.txt
 
 In order to install the Python modules required for our app, we need to create a file called **requirements.txt** and add the following line to that file:
 
 ```
-pymongo
 flask
+redis
 ```
 
 
 ### 5.4 Write a Dockerfile
 
 ```
-FROM python:3.7
-
-WORKDIR /src
-COPY . .
+FROM python:3.7-alpine
+WORKDIR /code
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-
-CMD ["./server.py"]
+EXPOSE 5000
+COPY . .
+CMD ["flask", "run"]
 ```
-
-### 5.5 nginx
-
-Start by creating a directory called ```mkdir nginx``` at the root level  where we'll create the following file
-
-### 5.6 nginx.config
-```
-server {
-  listen 80;
-  location / {
-    proxy_pass http://$FLASK_SERVER_ADDR;
-  }
-}
-```
-
-At the root level create the following file
 
 ### 5.7 docker-compose.yaml
 ```
-version: "3.7"
+version: "3.8"
 services:
   web:
-    image: nginx
-    volumes:
-      - ./nginx/nginx.conf:/tmp/nginx.conf
-    environment: 
-      - FLASK_SERVER_ADDR=backend:9091  
-    command: /bin/bash -c "envsubst < /tmp/nginx.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'" 
+    build: .
     ports:
-      - 80:80
-    depends_on:
-      - backend
-  backend:
-    build: flask
-    environment: 
-      - FLASK_SERVER_PORT=9091
-    volumes:
-      - ./flask:/src
-    depends_on:
-      -  mongo  
-  mongo:
-    image: mongo
+      - "5000:5000"
+  redis:
+    image: "redis:alpine"
 ```
 
-The compose file defines an application with three services `web`, `backend` and `db`.
-When deploying the application, docker-compose maps port 80 of the web service container to port 80 of the host as specified in the file.
-Make sure port 80 on the host is not being used by another container, otherwise the port should be changed.
+The compose file defines an application with three services `web` and `redis` backend.
 
-### 5.8 Deploy with docker-compose
+## 5.8 Deploy with docker-compose
 
 ```
 $ docker-compose up -d
-Creating network "nginx-flask-mongo_default" with the default driver
-Pulling mongo (mongo:)...
-latest: Pulling from library/mongo
-423ae2b273f4: Pull complete
-...
-...
-Status: Downloaded newer image for nginx:latest
-Creating nginx-flask-mongo_mongo_1 ... done
-Creating nginx-flask-mongo_backend_1 ... done
-Creating nginx-flask-mongo_web_1     ... done
+Creating network "composetest_default" with the default driver
+Creating composetest_web_1 ...
+Creating composetest_redis_1 ...
+Creating composetest_web_1
+Creating composetest_redis_1 ... done
+Attaching to composetest_web_1, composetest_redis_1
+web_1    |  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+redis_1  | 1:C 17 Aug 22:11:10.480 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+redis_1  | 1:C 17 Aug 22:11:10.480 # Redis version=4.0.1, bits=64, commit=00000000, modified=0, pid=1, just started
+redis_1  | 1:C 17 Aug 22:11:10.480 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+web_1    |  * Restarting with stat
+redis_1  | 1:M 17 Aug 22:11:10.483 * Running mode=standalone, port=6379.
+redis_1  | 1:M 17 Aug 22:11:10.483 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+web_1    |  * Debugger is active!
+redis_1  | 1:M 17 Aug 22:11:10.483 # Server initialized
+redis_1  | 1:M 17 Aug 22:11:10.483 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+web_1    |  * Debugger PIN: 330-787-903
+redis_1  | 1:M 17 Aug 22:11:10.483 * Ready to accept connections
 
 ```
 
-### 5.9 Expected result
+## 5.9 Expected result
 
-Listing containers must show three containers running and the port mapping as below:
+Listing containers must show two containers running and the port mapping
+
+
+After the application starts, navigate to `http://localhost:5000` in your web browser or run:
 ```
-$ docker ps
-CONTAINER ID        IMAGE                        COMMAND                  CREATED             STATUS              PORTS                  NAMES
-a0f4ebe686ff        nginx                       "/bin/bash -c 'envsu…"   About a minute ago   Up About a minute   0.0.0.0:80->80/tcp     nginx-flask-mongo_web_1
-dba87a080821        nginx-flask-mongo_backend   "./server.py"            About a minute ago   Up About a minute                          nginx-flask-mongo_backend_1
-d7eea5481c77        mongo                       "docker-entrypoint.s…"   About a minute ago   Up About a minute   27017/tcp              nginx-flask-mongo_mongo_1
+$ curl http://localhost:5000
+Hello World! I have been seen 1 times.
 ```
 
-After the application starts, navigate to `http://localhost:80` in your web browser or run:
-```
-$ curl http://localhost:80
-Hello fom the MongoDB client!
-```
+Refresh the page. The number should increment.
+
+## 5.10 Expected result
 
 Stop and remove the containers
 ```
