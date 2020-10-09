@@ -1,4 +1,4 @@
-## 4.0 Flash App with Docker
+## 4.0 Fla App with Docker
 **The goal of this exercise is to create a Docker image which will run a Flask app.**
 
 We'll do this by first pulling together the components for a random cat picture generator built with Python Flask, then _dockerizing_ it by writing a _Dockerfile_. Finally, we'll build the image, and then run it.
