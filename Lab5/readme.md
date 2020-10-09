@@ -1,22 +1,18 @@
 ## 5.0 Docker Compose
 **The goal of this exercise is to create a Docker Compose with Python/Flask application with Redis database**
 
+
+### 5.1 Create a Python Flask app
+
+Start by creating a directory called ```mkdir composetest``` where we'll create the following files:
 Project structure:
+
 ```
-.
 ├── app.py
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yaml
-
-
-
 ```
-
-### 5.1 Create a Python Flask app
-
-
-Start by creating a directory called ```mkdir composetest``` where we'll create the following files:
 
 Make sure to ```cd composetest``` before you start creating the files.
 
@@ -118,7 +114,6 @@ redis_1  | 1:M 17 Aug 22:11:10.483 * Ready to accept connections
 
 Listing containers must show two containers running and the port mapping
 
-
 After the application starts, navigate to `http://localhost:5000` in your web browser or run:
 ```
 $ curl http://localhost:5000
@@ -127,11 +122,56 @@ Hello World! I have been seen 1 times.
 
 Refresh the page. The number should increment.
 
-## 5.10 Expected result
+## 5.10 Edit the Compose file
 
-Stop and remove the containers
+Stop the application, either by running 
+
 ```
 $ docker-compose down
 ```
+from within your project directory in the second terminal or by hitting CTRL+C in the original terminal where you started the app.
+Edit docker-compose.yml in your project directory to add a bind mount for the web service:
 
+```
+version: "3.8"
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/code
+    environment:
+      FLASK_ENV: development
+  redis:
+    image: "redis:alpine"
+```
 
+The new volumes key mounts the project directory (current directory) on the host to /code inside the container, allowing you to modify the code on the fly, without having to rebuild the image. The environment key sets the FLASK_ENV environment variable, which tells flask run to run in development mode and reload the code on change. This mode should only be used in development.
+
+## 5.11 Re-build and run the app with Compose
+
+```
+$ docker-compose up
+Creating network "composetest_default" with the default driver
+Creating composetest_web_1 ...
+Creating composetest_redis_1 ...
+Creating composetest_web_1
+Creating composetest_redis_1 ... done
+Attaching to composetest_web_1, composetest_redis_1
+web_1    |  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+...
+```
+Check the Hello World message in a web browser again, and refresh to see the count increment.
+
+## 5.12 Update the application
+
+Because the application code is now mounted into the container using a volume, you can make changes to its code and see the changes instantly, without having to rebuild the image.
+
+Change the greeting in app.py and save it. For example, change the Hello World! message to Hello from Docker!:
+
+```
+return 'Hello from Docker! I have been seen {} times.\n'.format(count)
+```
+
+Refresh the app in your browser. The greeting should be updated, and the counter should still be incrementing.
