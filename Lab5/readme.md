@@ -21,7 +21,7 @@ Start by creating a directory called ```mkdir flask``` where we'll create the fo
 
 Make sure to ```cd flask``` before you start creating the files, because you don't want to start adding a whole bunch of other random files to your image.
 
-#### 5.2 server.py
+### 5.2 server.py
 
 Create the **server.py** with the following content:
 
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
 ```
 
-#### 5.3 requirements.txt
+### 5.3 requirements.txt
 
 In order to install the Python modules required for our app, we need to create a file called **requirements.txt** and add the following line to that file:
 
@@ -76,7 +76,7 @@ CMD ["./server.py"]
 
 Start by creating a directory called ```mkdir nginx``` at the root level  where we'll create the following file
 
-#### 5.6 nginx.config
+### 5.6 nginx.config
 ```
 server {
   listen 80;
@@ -86,9 +86,9 @@ server {
 }
 ```
 
-Start by creating a directory called ```mkdir nginx``` at the root level  where we'll create the following file
+At the root level create the following file
 
-#### 5.7 docker-compose.yaml
+### 5.7 docker-compose.yaml
 ```
 version: "3.7"
 services:
@@ -119,7 +119,7 @@ The compose file defines an application with three services `web`, `backend` and
 When deploying the application, docker-compose maps port 80 of the web service container to port 80 of the host as specified in the file.
 Make sure port 80 on the host is not being used by another container, otherwise the port should be changed.
 
-## Deploy with docker-compose
+### 5.8 Deploy with docker-compose
 
 ```
 $ docker-compose up -d
@@ -136,7 +136,7 @@ Creating nginx-flask-mongo_web_1     ... done
 
 ```
 
-## Expected result
+### 5.9 Expected result
 
 Listing containers must show three containers running and the port mapping as below:
 ```
