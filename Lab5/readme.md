@@ -150,7 +150,7 @@ d7eea5481c77        mongo                       "docker-entrypoint.s…"   About
 
 After the application starts, navigate to `http://localhost:80` in your web browser or run:
 ```
-$ curl localhost:80
+$ curl http://localhost:80
 Hello fom the MongoDB client!
 ```
 
