@@ -1,5 +1,6 @@
 ## 5.0 Docker Compose
 **The goal of this exercise is to create a Docker Compose with Python/Flask application with Nginx proxy and a Mongo database**
+Before starting, [install Compose](https://docs.docker.com/compose/install/)
 
 Project structure:
 ```
