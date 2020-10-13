@@ -98,6 +98,7 @@ $ docker service create -d --replicas=4 --name devtest-service  --mount source=m
 Use docker service ps devtest-service to verify that the service is running:
 
 ```
+$ docker swarm init
 $ docker service ps devtest-service
 
 ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
