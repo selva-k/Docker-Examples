@@ -87,3 +87,28 @@ $ docker container rm devtest
 $ docker volume rm myvol2
 
 ```
+
+### 6.5 Start a service with volumes
+The following example starts a nginx service with four replicas, each of which uses a local volume called myvol2
+
+```
+$ docker service create -d --replicas=4 --name devtest-service  --mount source=myvol2,target=/app nginx:latest
+```
+
+Use docker service ps devtest-service to verify that the service is running:
+
+```
+$ docker service ps devtest-service
+
+ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
+4d7oz1j85wwn        devtest-service.1   nginx:latest        moby                Running             Running 14 seconds ago
+```
+
+Remove the service, which stops all its tasks:
+
+
+```
+$ docker service rm devtest-service
+```
+
+
