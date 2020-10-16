@@ -7,6 +7,7 @@ Start by creating a directory called mkdir prometheus. Make sure to cd prometheu
 Create a prometheus.yml file and populate it with this configuration:
 
 ```
+scrape_configs:
 - job_name: cadvisor
   scrape_interval: 5s
   static_configs:
