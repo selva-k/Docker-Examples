@@ -16,8 +16,6 @@ scrape_configs:
 ```
 
 ### 7.2 Docker Compose configuration
-Create a prometheus.yml file and populate it with this configuration:
-
 In the same folder where you created the prometheus.yml file, create a docker-compose.yml file and populate it with this Docker Compose configuration:
 
 ```
