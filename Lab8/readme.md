@@ -25,6 +25,8 @@ You will need all of the following to complete this lab:
 
 - A Docker Swarm cluster running **Docker 1.13** or higher
 
+Swarm mode enabled - Ensure that swarm mode is enabled before starting this tutorial. If it is not, open your terminal window and type the *docker swarm init* command.
+
 # <a name="create"></a>Step 1: Create a Secret
 
 In this step you'll use the `docker secret create` command to create a new
